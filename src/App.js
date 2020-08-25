@@ -1,25 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Levels from "./Levels";
+import Game from "./Game";
+import Nback from "./Nback";
+import { BrowserRouter, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="sans-serif">
+        <Route path="/" component={Levels} exact={true} />
+        <Route path="/game/:level" component={Game} />
+        <Route path="/nback/:level" component={Nback} />
+
+      </div>
+    </BrowserRouter>
   );
 }
 
