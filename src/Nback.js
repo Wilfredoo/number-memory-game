@@ -32,26 +32,81 @@ function Nback({
     generateArrayofNumbers();
   }, []);
 
+
+  const setDigits = async () => {
+    let digits;
+    switch (level) {
+      case "7":
+        digits = 3;
+        break;
+      case "8":
+        digits = 4;
+        break;
+      case "9":
+        digits = 5;
+        break;
+      case "10":
+        digits = 6;
+        break;
+    }
+    return digits;
+  };
+
   const hearSequence = async (sequence) => {
-    setTimeout(() => {
-      setShowInput0(true);
-    }, 3000);
-    setTimeout(() => {
-      setShowInput1(true);
-    }, 6000);
+    let time;
+    switch (level) {
+      case "7":
+        time = 4000;
+        break;
+      case "8":
+        time = 3500;
+        break;
+      case "9":
+        time = 3500;
+      case "10":
+        time = 4000;
+        break;
+    }
+    
+    const inputSets = [
+      setShowInput0,
+      setShowInput1,
+      setShowInput2,
+      setShowInput3,
+      setShowInput4,
+      setShowInput5,
+      setShowInput6,
+      setShowInput7,
+      setShowInput8,
+      setShowInput9,
+    ];
+
+    inputSets.forEach((data, i) => {
+        data(false);
+    });
+
+    setResults([])
+
+    inputSets.forEach((data, i) => {
+      setTimeout(() => {
+        data(true);
+      }, time * i + time);
+    });
     reset();
 
     sequence.forEach((element, index) => {
       setTimeout(function () {
         speak({ text: element });
-      }, index * 3000);
+      }, index * time);
     });
     setTimeout(() => {
       setDisabled(false);
-    }, 3000);
+    }, time);
   };
 
   const onSubmit = (userAnswers) => {
+    setDisabled(true);
+
     let resultsArray = [];
     correctAnswersArray.forEach((data, i) => {
       if (data === userAnswers[i]) resultsArray.push("correct");
@@ -62,10 +117,12 @@ function Nback({
   };
 
   const generateArrayofNumbers = async () => {
+    const digits = await setDigits();
+
     const sequenceArray = [];
     for (let u = 0; u < 10; u++) {
       const numberArray = [];
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < digits; i++) {
         const digit = Math.floor(Math.random() * 10);
         numberArray.push(digit);
         numberArray.push(" ");
@@ -80,7 +137,18 @@ function Nback({
   };
 
   const inputs = sequence.map((data, i) => {
-    const inputIndexes = [showInput0, showInput1, showInput2, showInput2, showInput3, showInput4, showInput5, showInput6, showInput7, showInput8, showInput9]
+    const inputIndexes = [
+      showInput0,
+      showInput1,
+      showInput2,
+      showInput3,
+      showInput4,
+      showInput5,
+      showInput6,
+      showInput7,
+      showInput8,
+      showInput9,
+    ];
     if (sequence !== null) {
       return (
         <div className="inputDiv">
@@ -120,10 +188,11 @@ function Nback({
       >
         Start Sequence
       </button>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {inputs}
-          <button type="submit">Submit</button>
-        </form>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {inputs}
+        {showInput9 &&
+        <button type="submit">Submit</button>}
+      </form>
 
       <p className="error">{errors.answer && errors.answer.message}</p>
     </div>

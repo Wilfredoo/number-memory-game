@@ -38,7 +38,6 @@ function Game({
       case "3":
         digits = 8;
         break;
-
       case "4":
         digits = 4;
         break;
@@ -90,17 +89,22 @@ function Game({
           setOneIsCorrect("first");
         }, time);
       }
-      console.log("correct answers", correctAnswer, correctAnswer2);
     }
   };
 
   const onSubmit = (values) => {
+    const wrongAnswers = ["failed", "shame", "wrong", "that was very wrong", "sooooo sooo wrong","what is wrong with you", "not good", "bro. can you even hear"]
+    const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+
     setDisabled(true);
     setOneIsCorrect(null);
-    console.log("what is correct", correctAnswer);
     if (values.answer === correctAnswer) {
+    speak({ text: "success" });
+
       setCorrectAnswers((oldArray) => [...oldArray, values.answer]);
     } else {
+    speak({ text: wrongAnswer });
+
       setIncorrectAnswers((oldArray) => [...oldArray, values.answer]);
     }
     reset();
@@ -111,9 +115,6 @@ function Game({
   const generateNumber = async () => {
     const digits = await setDigits();
     const numberArray = [];
-    console.log("level", level)
-
-    console.log("digits", digits)
     for (let i = 0; i < digits; i++) {
       const digit = Math.floor(Math.random() * 10);
       numberArray.push(digit);
