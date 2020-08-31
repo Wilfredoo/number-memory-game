@@ -12,6 +12,17 @@ function Nback({
   },
 }) {
   const [disabled, setDisabled] = useState(true);
+  const [showInput0, setShowInput0] = useState(false);
+  const [showInput1, setShowInput1] = useState(false);
+  const [showInput2, setShowInput2] = useState(false);
+  const [showInput3, setShowInput3] = useState(false);
+  const [showInput4, setShowInput4] = useState(false);
+  const [showInput5, setShowInput5] = useState(false);
+  const [showInput6, setShowInput6] = useState(false);
+  const [showInput7, setShowInput7] = useState(false);
+  const [showInput8, setShowInput8] = useState(false);
+  const [showInput9, setShowInput9] = useState(false);
+
   const [results, setResults] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const [sequence, setSequence] = useState([]);
@@ -22,6 +33,12 @@ function Nback({
   }, []);
 
   const hearSequence = async (sequence) => {
+    setTimeout(() => {
+      setShowInput0(true);
+    }, 3000);
+    setTimeout(() => {
+      setShowInput1(true);
+    }, 6000);
     reset();
 
     sequence.forEach((element, index) => {
@@ -63,19 +80,24 @@ function Nback({
   };
 
   const inputs = sequence.map((data, i) => {
+    const inputIndexes = [showInput0, showInput1, showInput2, showInput2, showInput3, showInput4, showInput5, showInput6, showInput7, showInput8, showInput9]
     if (sequence !== null) {
       return (
         <div className="inputDiv">
-          {console.log("results here", results[i])}
-          <input
-            type="number"
-            name={`${i}`}
-            placeholder={`what was number ${i + 1}?`}
-            ref={register({})}
+          {inputIndexes[i] && (
+            <input
+              type="number"
+              name={`${i}`}
+              placeholder={`what was number ${i + 1}?`}
+              ref={register({})}
             />
-            {results.length !== 0 && results[i] === "correct" && <p>Correctomundo</p>}
-            {results.length !== 0 && results[i] === "incorrect" && <p>Not correct!</p>}
-
+          )}
+          {results.length !== 0 && results[i] === "correct" && (
+            <p>Correctomundo</p>
+          )}
+          {results.length !== 0 && results[i] === "incorrect" && (
+            <p>Not correct!</p>
+          )}
         </div>
       );
     }
@@ -98,10 +120,10 @@ function Nback({
       >
         Start Sequence
       </button>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {inputs}
-        <button type="submit">Submit</button>
-      </form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {inputs}
+          <button type="submit">Submit</button>
+        </form>
 
       <p className="error">{errors.answer && errors.answer.message}</p>
     </div>
