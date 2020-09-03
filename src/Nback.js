@@ -23,7 +23,8 @@ function Nback({
   const [showInput8, setShowInput8] = useState(false);
   const [showInput9, setShowInput9] = useState(false);
 
-  const [results, setResults] = useState([]);
+  const [correctAnswers, setCorrectAnswers] = useState(null);
+
   const { handleSubmit, register, errors, reset } = useForm();
   const [sequence, setSequence] = useState([]);
   const { speak } = useSpeechSynthesis();
@@ -31,7 +32,6 @@ function Nback({
   useEffect(() => {
     generateArrayofNumbers();
   }, []);
-
 
   const setDigits = async () => {
     let digits;
@@ -46,7 +46,7 @@ function Nback({
         digits = 5;
         break;
       case "10":
-        digits = 6;
+        digits = 3;
         break;
     }
     return digits;
@@ -54,20 +54,28 @@ function Nback({
 
   const hearSequence = async (sequence) => {
     let time;
+    let delay;
+
     switch (level) {
       case "7":
         time = 4000;
+        delay = 2000;
         break;
       case "8":
-        time = 3500;
+        time = 4500;
+        delay = 2000;
         break;
       case "9":
-        time = 3500;
+        time = 4500;
+        delay = 2000;
+
       case "10":
         time = 4000;
+        delay = 3000;
+
         break;
     }
-    
+
     const inputSets = [
       setShowInput0,
       setShowInput1,
@@ -82,15 +90,14 @@ function Nback({
     ];
 
     inputSets.forEach((data, i) => {
-        data(false);
+      data(false);
     });
 
-    setResults([])
 
     inputSets.forEach((data, i) => {
       setTimeout(() => {
         data(true);
-      }, time * i + time);
+      }, time * i + time + delay);
     });
     reset();
 
@@ -106,14 +113,22 @@ function Nback({
 
   const onSubmit = (userAnswers) => {
     setDisabled(true);
+    setCorrectAnswers(null)
+    let correctCounter = 0;
 
-    let resultsArray = [];
+
     correctAnswersArray.forEach((data, i) => {
-      if (data === userAnswers[i]) resultsArray.push("correct");
-      else resultsArray.push("incorrect");
+      if (data === userAnswers[i]) correctCounter = correctCounter + 1;
     });
-    console.log(resultsArray);
-    setResults(resultsArray);
+
+    let message = "";
+    if (correctCounter <= 8) message = "wow. you really suck";
+    if (correctCounter === 9) message = "not bad";
+    if (correctCounter === 10) message = "ah. we got a champ here";
+
+    speak({ text: message });
+
+    setCorrectAnswers(correctCounter);
   };
 
   const generateArrayofNumbers = async () => {
@@ -160,12 +175,6 @@ function Nback({
               ref={register({})}
             />
           )}
-          {results.length !== 0 && results[i] === "correct" && (
-            <p>Correctomundo</p>
-          )}
-          {results.length !== 0 && results[i] === "incorrect" && (
-            <p>Not correct!</p>
-          )}
         </div>
       );
     }
@@ -190,9 +199,15 @@ function Nback({
       </button>
       <form onSubmit={handleSubmit(onSubmit)}>
         {inputs}
-        {showInput9 &&
-        <button type="submit">Submit</button>}
+        {showInput9 && <button type="submit">Submit</button>}
       </form>
+      {correctAnswers && (
+        <span>
+          Correct: {correctAnswers} out of
+          10
+        </span>
+      )}
+      {correctAnswers === 0 && <p>Completely wrong</p>}
 
       <p className="error">{errors.answer && errors.answer.message}</p>
     </div>

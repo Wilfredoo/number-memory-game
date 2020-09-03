@@ -93,7 +93,7 @@ function Game({
   };
 
   const onSubmit = (values) => {
-    const wrongAnswers = ["failed", "shame", "wrong", "that was very wrong", "sooooo sooo wrong","what is wrong with you", "not good", "bro. can you even hear"]
+    const wrongAnswers = ["failed", "shame", "wrong", "that was very wrong", "sooooo. sooo. wrong","what is wrong with you", "not good", "bro. can you even hear"]
     const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
 
     setDisabled(true);
