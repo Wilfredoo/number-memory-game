@@ -62,13 +62,13 @@ function Game({
       case "3":
         time = 3000;
       case "4":
-        time = 4000;
+        time = 5000;
         break;
       case "5":
-        time = 4500;
+        time = 5500;
         break;
       case "6":
-        time = 5000;
+        time = 6000;
     }
 
     speak({ text: number });
@@ -93,17 +93,28 @@ function Game({
   };
 
   const onSubmit = (values) => {
-    const wrongAnswers = ["failed", "shame", "wrong", "that was very wrong", "sooooo. sooo. wrong","what is wrong with you", "not good", "bro. can you even hear", "what the hell"]
-    const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+    const wrongAnswers = [
+      "failed",
+      "shame",
+      "wrong",
+      "that was very wrong",
+      "really?",
+      "what is wrong with you",
+      "not good",
+      "bro. can you even hear",
+      "what. the. hell",
+    ];
+    const wrongAnswer =
+      wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
 
     setDisabled(true);
     setOneIsCorrect(null);
     if (values.answer === correctAnswer) {
-    speak({ text: "success" });
+      speak({ text: "success" });
 
       setCorrectAnswers((oldArray) => [...oldArray, values.answer]);
     } else {
-    speak({ text: wrongAnswer });
+      speak({ text: wrongAnswer });
 
       setIncorrectAnswers((oldArray) => [...oldArray, values.answer]);
     }
@@ -166,22 +177,23 @@ function Game({
         Hear Number
       </button>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          type="number"
-          name="answer"
-          placeholder="what was the number?"
-          ref={register({
-            required: "Write your answer",
-          })}
-        />
-        <button disabled={disabled} type="submit">
-          Submit
-        </button>
-      </form>
+      {!disabled && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
+            type="number"
+            name="answer"
+            placeholder="what was the number?"
+            ref={register({
+              required: "Write your answer",
+            })}
+          />
+          <button disabled={disabled} type="submit">
+            Submit
+          </button>
+        </form>
+      )}
       <p className="error">{errors.answer && errors.answer.message}</p>
       {oneIsCorrect && <p>Please type the {oneIsCorrect} number</p>}
-      <div className="results">Results:</div>
       {correctAnswers &&
         correctAnswers.map((data, i) => {
           return (
