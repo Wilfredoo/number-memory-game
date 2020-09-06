@@ -30,22 +30,22 @@ function Game({
     let digits;
     switch (level) {
       case "1":
-        digits = 6;
-        break;
-      case "2":
         digits = 7;
         break;
-      case "3":
+      case "2":
         digits = 8;
         break;
+      case "3":
+        digits = 9;
+        break;
       case "4":
-        digits = 4;
+        digits = 6;
         break;
       case "5":
-        digits = 5;
+        digits = 7;
         break;
       case "6":
-        digits = 6;
+        digits = 8;
     }
     return digits;
   };
@@ -93,7 +93,7 @@ function Game({
   };
 
   const onSubmit = (values) => {
-    const wrongAnswers = ["failed", "shame", "wrong", "that was very wrong", "sooooo. sooo. wrong","what is wrong with you", "not good", "bro. can you even hear"]
+    const wrongAnswers = ["failed", "shame", "wrong", "that was very wrong", "sooooo. sooo. wrong","what is wrong with you", "not good", "bro. can you even hear", "what the hell"]
     const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
 
     setDisabled(true);
