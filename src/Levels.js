@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Levels() {
-  const levelsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const levelsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   return (
     <div className="App">
       <h3 className="title">Number Memory Trainer</h3>

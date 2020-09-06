@@ -48,11 +48,18 @@ function Nback({
       case "10":
         digits = 3;
         break;
+      case "11":
+        digits = 4;
+        break;
+      case "12":
+        digits = 5;
+        break;
     }
     return digits;
   };
 
   const hearSequence = async (sequence) => {
+    setCorrectAnswers(null);
     let time;
     let delay;
 
@@ -68,11 +75,18 @@ function Nback({
       case "9":
         time = 4500;
         delay = 2000;
-
+        break;
       case "10":
         time = 4000;
-        delay = 3000;
-
+        delay = 5000;
+        break;
+      case "11":
+        time = 4000;
+        delay = 5500;
+        break;
+      case "12":
+        time = 4000;
+        delay = 6000;
         break;
     }
 
@@ -93,7 +107,6 @@ function Nback({
       data(false);
     });
 
-
     inputSets.forEach((data, i) => {
       setTimeout(() => {
         data(true);
@@ -113,9 +126,8 @@ function Nback({
 
   const onSubmit = (userAnswers) => {
     setDisabled(true);
-    setCorrectAnswers(null)
+    setCorrectAnswers(null);
     let correctCounter = 0;
-
 
     correctAnswersArray.forEach((data, i) => {
       if (data === userAnswers[i]) correctCounter = correctCounter + 1;
@@ -201,12 +213,7 @@ function Nback({
         {inputs}
         {showInput9 && <button type="submit">Submit</button>}
       </form>
-      {correctAnswers && (
-        <span>
-          Correct: {correctAnswers} out of
-          10
-        </span>
-      )}
+      {correctAnswers && <span>Correct: {correctAnswers} out of 10</span>}
       {correctAnswers === 0 && <p>Completely wrong</p>}
 
       <p className="error">{errors.answer && errors.answer.message}</p>
