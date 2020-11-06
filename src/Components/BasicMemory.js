@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
+import "../App.css";
 import { useForm } from "react-hook-form";
 import { useSpeechSynthesis } from "react-speech-kit";
 import { Link } from "react-router-dom";
@@ -168,7 +168,6 @@ function Game({
           them. Pay attention.
         </p>
       )}
-
       <button
         className="speech"
         disabled={!disabled}
@@ -176,7 +175,6 @@ function Game({
       >
         Hear Number
       </button>
-
       {!disabled && (
         <form onSubmit={handleSubmit(onSubmit)}>
           <input

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
+import "../App.css";
 import { useForm } from "react-hook-form";
 import { useSpeechSynthesis } from "react-speech-kit";
 import { Link } from "react-router-dom";
