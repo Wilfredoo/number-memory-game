@@ -8,7 +8,7 @@ let correctAnswer;
 
 function BasicMemory({
 	match: {
-		params: { level },
+		params: { level, lang },
 	},
 }) {
 	const [correctAnswers, setCorrectAnswers] = useState([]);
@@ -16,11 +16,28 @@ function BasicMemory({
 	const [incorrectAnswers, setIncorrectAnswers] = useState([]);
 	const { handleSubmit, register, errors, reset } = useForm();
 	const [number, setNumber] = useState(null);
-	const { speak } = useSpeechSynthesis();
+	const { speak, voices } = useSpeechSynthesis();
 
 	useEffect(() => {
+		console.log("lang", lang)
 		generateNumber();
 	}, []);
+
+	const setVoiceIndex = async () => {
+		let voiceIndex;
+		switch (level) {
+			case 'DE':
+				voiceIndex = 0;
+				break;
+			case 'EN':
+				voiceIndex = 3;
+				break;
+			case 'ES':
+				voiceIndex = 5;
+				break;
+		}
+		return voiceIndex;
+	};
 
 	const setDigits = async () => {
 		let digits;
@@ -60,6 +77,20 @@ function BasicMemory({
 	};
 
 	const hearNumber = async (number) => {
+		let voiceIndex;
+		switch (lang) {
+			case 'DE':
+				voiceIndex = 0;
+				break;
+			case 'EN':
+				voiceIndex = 3;
+				break;
+			case 'ES':
+				voiceIndex = 5;
+				break;
+		}
+
+
 		let time;
 		switch (level) {
 			case '1':
@@ -92,8 +123,8 @@ function BasicMemory({
 				time = 7000;
 				break;
 		}
-
-		speak({ text: number });
+		console.log("voice index", voiceIndex)
+		speak({ text: number, voice: voices[voiceIndex] });
 		setTimeout(() => {
 			setDisabled(false);
 		}, time);
@@ -112,6 +143,9 @@ function BasicMemory({
 			'what the hell',
 			'dissapointing',
 			'you must be kidding me now',
+			'unrealistically wrong',
+			'at least you tried',
+			'Some stars are born, some stars are made. You are neither of them'
 		];
 
 		const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
@@ -145,7 +179,7 @@ function BasicMemory({
 
 	return (
 		<div className="App">
-			<Link to={`/levels/basic-memory`}>
+			<Link to={`/levels/basic-memory/${lang}`}>
 				<p>Back to Levels</p>{' '}
 			</Link>
 			<h3 className="title">Number Memory Trainer</h3>
