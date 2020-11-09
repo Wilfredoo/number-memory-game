@@ -13,19 +13,12 @@ function Levels({
 			<h3 className="title">Number Memory Trainer</h3>
 			<h2>Levels</h2>
 			{levelsArray &&
-				levelsArray.map((data) => {
+				levelsArray.map((level) => {
 					return (
 						<div>
-							{data <= 6 && (
-								<Link to={`/game/${data}`}>
-									<p>Level {data}</p>
+								<Link to={`/${game}/${level}`}>
+									<p>Level {level}</p>
 								</Link>
-							)}
-							{data >= 7 && (
-								<Link to={`/nback/${data}`}>
-									<p>Level {data}</p>
-								</Link>
-							)}
 						</div>
 					);
 				})}

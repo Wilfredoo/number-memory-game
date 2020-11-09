@@ -11,7 +11,7 @@ function GamesIndex() {
         games.map((data) => {
           return (
             <div>
-              <Link to={`/${data.url}/levels`}>
+              <Link to={`/levels/${data.url}`}>
                 <p className="games">{data.title}</p>
               </Link>
             </div>
