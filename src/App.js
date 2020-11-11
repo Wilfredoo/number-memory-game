@@ -13,7 +13,7 @@ function App() {
 				<Route path="/" component={GameIndex} exact />
 				<Route path="/levels/:game/:langParam" component={Levels} exact />
 				<Route path="/basic-memory/:level/:lang" component={BasicMemory} />
-				<Route path="/selective-memory/:level/:lang" component={SelectiveMemory} />
+				{/* <Route path="/selective-memory/:level/:lang" component={SelectiveMemory} /> */}
 				<Route path="/dual-n-back/:level/:lang" component={Nback} />
 			</div>
 		</BrowserRouter>

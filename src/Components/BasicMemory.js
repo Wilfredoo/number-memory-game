@@ -3,6 +3,8 @@ import '../App.css';
 import { useForm } from 'react-hook-form';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import { Link } from 'react-router-dom';
+import {wrongAnswers_english, wrongAnswers_german, wrongAnswers_spanish} from "../Helpers/answers"
+import setAttributes from "../Helpers/setAttributes"
 
 let correctAnswer;
 
@@ -19,62 +21,10 @@ function BasicMemory({
 	const { speak, voices } = useSpeechSynthesis();
 
 	useEffect(() => {
-		console.log("lang", lang)
 		generateNumber();
 	}, []);
 
-	const setVoiceIndex = async () => {
-		let voiceIndex;
-		switch (level) {
-			case 'DE':
-				voiceIndex = 0;
-				break;
-			case 'EN':
-				voiceIndex = 3;
-				break;
-			case 'ES':
-				voiceIndex = 5;
-				break;
-		}
-		return voiceIndex;
-	};
 
-	const setDigits = async () => {
-		let digits;
-		switch (level) {
-			case '1':
-				digits = 5;
-				break;
-			case '2':
-				digits = 6;
-				break;
-			case '3':
-				digits = 7;
-				break;
-			case '4':
-				digits = 8;
-				break;
-			case '5':
-				digits = 9;
-				break;
-			case '6':
-				digits = 10;
-				break;
-			case '7':
-				digits = 11;
-				break;
-			case '8':
-				digits = 12;
-				break;
-			case '9':
-				digits = 13;
-				break;
-			case '10':
-				digits = 14;
-				break;
-		}
-		return digits;
-	};
 
 	const hearNumber = async (number) => {
 		let voiceIndex;
@@ -90,40 +40,7 @@ function BasicMemory({
 				break;
 		}
 
-
-		let time;
-		switch (level) {
-			case '1':
-				time = 2500;
-				break;
-			case '2':
-				time = 3000;
-				break;
-			case '3':
-				time = 3000;
-			case '4':
-				time = 5000;
-				break;
-			case '5':
-				time = 5500;
-				break;
-			case '6':
-				time = 6000;
-				break;
-			case '7':
-				time = 6000;
-				break;
-			case '8':
-				time = 6500;
-				break;
-			case '9':
-				time = 6500;
-				break;
-			case '10':
-				time = 7000;
-				break;
-		}
-		console.log("voice index", voiceIndex)
+		setAttributes(level)
 		speak({ text: number, voice: voices[voiceIndex] });
 		setTimeout(() => {
 			setDisabled(false);
@@ -131,32 +48,37 @@ function BasicMemory({
 	};
 
 	const onSubmit = (values) => {
-		const wrongAnswers = [
-			'failed',
-			'shame',
-			'wrong',
-			'that was very wrong',
-			'really?',
-			'what is wrong with you',
-			'not good',
-			'bro. can you even hear',
-			'what the hell',
-			'dissapointing',
-			'you must be kidding me now',
-			'unrealistically wrong',
-			'at least you tried',
-			'Some stars are born, some stars are made. You are neither of them'
-		];
+		let successAnswer
+		let wrongAnswers
+		let voiceIndex;
+		switch (lang) {
+			case 'DE':
+				voiceIndex = 0;
+				successAnswer="richtig richtig gut"
+				wrongAnswers=wrongAnswers_german
+				break;
+			case 'EN':
 
+				voiceIndex = 3;
+				successAnswer="success"
+				wrongAnswers = wrongAnswers_english
+				break;
+			case 'ES':
+				voiceIndex = 5;
+				wrongAnswers= wrongAnswers_spanish
+				successAnswer="muy bien!"
+				break;
+		}
 		const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
 
 		setDisabled(true);
+
+
 		if (values.answer === correctAnswer) {
-			speak({ text: 'success' });
+			speak({ text: successAnswer, voice: voices[voiceIndex] });
 			setCorrectAnswers((oldArray) => [...oldArray, values.answer]);
 		} else {
-			speak({ text: wrongAnswer });
-
+			speak({ text: wrongAnswer, voice: voices[voiceIndex] });
 			setIncorrectAnswers((oldArray) => [...oldArray, values.answer]);
 		}
 		reset();
@@ -164,7 +86,7 @@ function BasicMemory({
 	};
 
 	const generateNumber = async () => {
-		const digits = await setDigits();
+		const digits = await setAttributes(level);
 		const numberArray = [];
 		for (let i = 0; i < digits; i++) {
 			const digit = Math.floor(Math.random() * 10);
