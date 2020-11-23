@@ -3,8 +3,8 @@ import '../App.css';
 import { useForm } from 'react-hook-form';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import { Link } from 'react-router-dom';
-import {wrongAnswers_english, wrongAnswers_german, wrongAnswers_spanish} from "../Helpers/answers"
-import setAttributes from "../Helpers/setAttributes"
+import { wrongAnswers_english, wrongAnswers_german, wrongAnswers_spanish } from '../Helpers/answers';
+import getAttributes from '../Helpers/setAttributes';
 
 let correctAnswer;
 
@@ -24,8 +24,6 @@ function BasicMemory({
 		generateNumber();
 	}, []);
 
-
-
 	const hearNumber = async (number) => {
 		let voiceIndex;
 		switch (lang) {
@@ -40,7 +38,8 @@ function BasicMemory({
 				break;
 		}
 
-		setAttributes(level)
+		const {time} = await getAttributes(level);
+		console.log("attribes", time)
 		speak({ text: number, voice: voices[voiceIndex] });
 		setTimeout(() => {
 			setDisabled(false);
@@ -48,31 +47,29 @@ function BasicMemory({
 	};
 
 	const onSubmit = (values) => {
-		let successAnswer
-		let wrongAnswers
+		let successAnswer;
+		let wrongAnswers;
 		let voiceIndex;
 		switch (lang) {
 			case 'DE':
 				voiceIndex = 0;
-				successAnswer="richtig richtig gut"
-				wrongAnswers=wrongAnswers_german
+				successAnswer = 'richtig richtig gut';
+				wrongAnswers = wrongAnswers_german;
 				break;
 			case 'EN':
-
 				voiceIndex = 3;
-				successAnswer="success"
-				wrongAnswers = wrongAnswers_english
+				successAnswer = 'success';
+				wrongAnswers = wrongAnswers_english;
 				break;
 			case 'ES':
 				voiceIndex = 5;
-				wrongAnswers= wrongAnswers_spanish
-				successAnswer="muy bien!"
+				wrongAnswers = wrongAnswers_spanish;
+				successAnswer = 'muy bien!';
 				break;
 		}
 		const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
 
 		setDisabled(true);
-
 
 		if (values.answer === correctAnswer) {
 			speak({ text: successAnswer, voice: voices[voiceIndex] });
@@ -86,7 +83,8 @@ function BasicMemory({
 	};
 
 	const generateNumber = async () => {
-		const digits = await setAttributes(level);
+		const {digits} = await getAttributes(level);
+		console.log("attributes here", digits)
 		const numberArray = [];
 		for (let i = 0; i < digits; i++) {
 			const digit = Math.floor(Math.random() * 10);

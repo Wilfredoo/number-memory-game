@@ -1,7 +1,6 @@
-const setAttributes = async (level) => {
+const getAttributes = async (level) => {
     let digits;
 	let time;
-    
 	switch (level) {
 		case '1':
 			digits = 5;
@@ -44,7 +43,7 @@ const setAttributes = async (level) => {
 			time = 3000;
 			break;
 	}
-	return digits, time;
+	return {digits, time};
 };
 
-export default setAttributes;
+export default getAttributes;
