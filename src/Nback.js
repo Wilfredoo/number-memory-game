@@ -22,7 +22,9 @@ function Nback({
   const [showInput7, setShowInput7] = useState(false);
   const [showInput8, setShowInput8] = useState(false);
   const [showInput9, setShowInput9] = useState(false);
+
   const [correctAnswers, setCorrectAnswers] = useState(null);
+
   const { handleSubmit, register, errors, reset } = useForm();
   const [sequence, setSequence] = useState([]);
   const { speak } = useSpeechSynthesis();
@@ -60,6 +62,7 @@ function Nback({
     setCorrectAnswers(null);
     let time;
     let delay;
+
     switch (level) {
       case "7":
         time = 4000;
@@ -212,6 +215,7 @@ function Nback({
       </form>
       {correctAnswers && <span>Correct: {correctAnswers} out of 10</span>}
       {correctAnswers === 0 && <p>Completely wrong</p>}
+
       <p className="error">{errors.answer && errors.answer.message}</p>
     </div>
   );
